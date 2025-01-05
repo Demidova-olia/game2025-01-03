@@ -1,62 +1,60 @@
-let randomNumbers = []; 
+let randomNumbers = [];
+
 
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));  
-        [array[i], array[j]] = [array[j], array[i]];  
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
     }
 }
+
 
 function generateAllNumbers() {
     randomNumbers = [];
     for (let i = 1; i <= 16; i++) {
-        randomNumbers.push(i);  
+        randomNumbers.push(i);
     }
-
-    shuffleArray(randomNumbers);  
+    shuffleArray(randomNumbers);
     console.log('Numbers:', randomNumbers);
 }
 
+
 document.querySelector('table').addEventListener('mousemove', () => {
-    if (randomNumbers.length === 0) {  
+    if (randomNumbers.length === 0) {
         generateAllNumbers();
     }
 });
 
-
 let buttons = document.querySelectorAll('button');
+let lastImageSrc = '';
+let lastClickedButton = null;
 
-
-let lastImageSrc = ''; 
-let lastClickedButton = null;  
 
 function addButtonImage(buttonElement, imageSrc) {
-  
-    if (!buttonElement.querySelector('img')) { 
-        let imageElement = document.createElement('img'); 
-        imageElement.src = imageSrc; 
+    if (!buttonElement.querySelector('img')) {
+        let imageElement = document.createElement('img');
+        imageElement.src = imageSrc;
         buttonElement.append(imageElement);
-        lastImageSrc = imageSrc; 
     }
 }
 
 
 function removeImagesFromButtons(button1, button2) {
-    let img1 = button1.querySelector('img');
-    let img2 = button2.querySelector('img');
-    if (img1) {
-        img1.remove(); 
+    if (button1 && button1.querySelector('img')) {
+        button1.querySelector('img').remove();
     }
-    if (img2) {
-        img2.remove(); 
+    if (button2 && button2.querySelector('img')) {
+        button2.querySelector('img').remove();
     }
-} 
+}
+
 
 buttons.forEach((button, index) => {
     button.addEventListener('click', () => {
-        let number = randomNumbers[index];  
+        let number = randomNumbers[index];
+        let imageSrc = '';
+
         
-        let imageSrc = ''; 
         if (number === 1 || number === 9) {
             imageSrc = 'cat.jpg';
         } else if (number === 2 || number === 10) {
@@ -76,18 +74,31 @@ buttons.forEach((button, index) => {
         }
 
         
-        if (lastClickedButton && lastImageSrc !== imageSrc) {
-           
-            removeImagesFromButtons(lastClickedButton, button);
-            lastImageSrc = '';  
-            lastClickedButton = null;
+        if (button.querySelector('img')) {
+            return;
         }
 
        
         addButtonImage(button, imageSrc);
 
-       
-        lastClickedButton = button;
+        
+        if (lastClickedButton) {
+            
+            if (lastImageSrc === imageSrc) {
+                lastClickedButton = null; 
+                lastImageSrc = '';
+            } else {
+                
+                setTimeout(() => {
+                    removeImagesFromButtons(lastClickedButton, button);
+                    lastClickedButton = null;
+                    lastImageSrc = '';
+                }, 1000);
+            }
+        } else {
+            
+            lastClickedButton = button;
+            lastImageSrc = imageSrc;
+        }
     });
 });
-
