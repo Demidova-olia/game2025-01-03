@@ -80,23 +80,28 @@ buttons.forEach((button, index) => {
 
        
         addButtonImage(button, imageSrc);
+        
+
 
         
         if (lastClickedButton) {
-            
             if (lastImageSrc === imageSrc) {
+                // Match found
+                lastClickedButton.classList.add('matched');
+                button.classList.add('matched');
                 lastClickedButton = null; 
                 lastImageSrc = '';
             } else {
-                
+                // No match found
                 setTimeout(() => {
                     removeImagesFromButtons(lastClickedButton, button);
+                    lastClickedButton.classList.remove('matched');
+                    button.classList.remove('matched');
                     lastClickedButton = null;
                     lastImageSrc = '';
-                }, 1000);
+                }, 800);
             }
         } else {
-            
             lastClickedButton = button;
             lastImageSrc = imageSrc;
         }
