@@ -1,0 +1,15 @@
+h1 {
+    padding-left: 100px;
+}
+table{
+    padding: 50px;
+}
+table td button { 
+    height: 100px;
+    width: 100px;
+
+}
+img{
+    height: 80px;
+    width: 80px;
+}
